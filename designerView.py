@@ -9,6 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import random
 
 
 class Ui_MainWindow(object):
@@ -17,42 +18,51 @@ class Ui_MainWindow(object):
         MainWindow.resize(519, 391)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.buttonRock = QtWidgets.QPushButton(self.centralwidget)
+        self.buttonRock = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.clickRock())
         self.buttonRock.setGeometry(QtCore.QRect(90, 110, 101, 91))
         font = QtGui.QFont()
         font.setPointSize(14)
         self.buttonRock.setFont(font)
         self.buttonRock.setObjectName("buttonRock")
-        self.buttonPaper = QtWidgets.QPushButton(self.centralwidget)
+        self.buttonPaper = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.clickPaper())
         self.buttonPaper.setGeometry(QtCore.QRect(210, 110, 101, 91))
         font = QtGui.QFont()
         font.setPointSize(14)
         self.buttonPaper.setFont(font)
         self.buttonPaper.setObjectName("buttonPaper")
-        self.buttonScissors = QtWidgets.QPushButton(self.centralwidget)
+        self.buttonScissors = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.clickScissors())
         self.buttonScissors.setGeometry(QtCore.QRect(330, 110, 101, 91))
         font = QtGui.QFont()
         font.setPointSize(14)
         self.buttonScissors.setFont(font)
         self.buttonScissors.setObjectName("buttonScissors")
-        self.buttonLizard = QtWidgets.QPushButton(self.centralwidget)
+        self.buttonLizard = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.clickLizard())
         self.buttonLizard.setGeometry(QtCore.QRect(150, 210, 101, 91))
         font = QtGui.QFont()
         font.setPointSize(14)
         self.buttonLizard.setFont(font)
         self.buttonLizard.setObjectName("buttonLizard")
-        self.buttonSpock = QtWidgets.QPushButton(self.centralwidget)
+        self.buttonSpock = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.clickSpock())
         self.buttonSpock.setGeometry(QtCore.QRect(270, 210, 101, 91))
         font = QtGui.QFont()
         font.setPointSize(14)
         self.buttonSpock.setFont(font)
         self.buttonSpock.setObjectName("buttonSpock")
+
         self.labelTitle = QtWidgets.QLabel(self.centralwidget)
-        self.labelTitle.setGeometry(QtCore.QRect(140, 50, 251, 41))
+        self.labelTitle.setGeometry(QtCore.QRect(90, 50, 350, 41))
         font = QtGui.QFont()
         font.setPointSize(20)
         self.labelTitle.setFont(font)
         self.labelTitle.setObjectName("labelTitle")
+
+        self.labelWinner = QtWidgets.QLabel(self.centralwidget)
+        self.labelWinner.setGeometry(QtCore.QRect(110,310,310,60))
+        font = QtGui.QFont()
+        font.setPointSize(20)
+        self.labelWinner.setFont(font)
+        self.labelWinner.setObjectName("labelWinner")
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 519, 21))
@@ -75,12 +85,93 @@ class Ui_MainWindow(object):
         self.buttonSpock.setText(_translate("MainWindow", "Spock"))
         self.labelTitle.setText(_translate("MainWindow", "LET\'S PLAY A GAME!"))
 
+    def gameplay(self, player):
+        computer = random.randint(1,5)
+        if player == computer:
+            if player == 1:
+                return ('Rock versus Rock', 'Tie Game')
+            elif player == 2:
+                return ('Paper versus Paper', 'Tie Game')
+            elif player == 3:
+                return ('Scissors versus Scissors', 'Tie Game')
+            elif player == 4:
+                return ('Lizard versus Lizard', 'Tie Game')
+            else:
+                return ('Spock versus Spock', 'Tie Game')
+        elif player == 1:
+            if computer == 2:
+                return ('Paper covers Rock', 'You Lose')
+            elif computer == 3:
+                return ('Rock crushes Scissors', 'You Win')
+            elif computer == 4:
+                return ('Rock crushes Lizard', 'You Win')
+            else:
+                return ('Spock vaporizes Rock', 'You Lose')
+        elif player == 2:
+            if computer == 1:
+                return ('Paper covers Rock', 'You Win')
+            elif computer == 3:
+                return ('Scissors cuts Paper', 'You Lose')
+            elif computer == 4:
+                return ('Lizard eats Paper', 'You Lose')
+            else:
+                return ('Paper disproves Spock', 'You Win')
+        elif player == 3:
+            if computer == 1:
+                return ('Rock crushes Scissors', 'You Lose')
+            elif computer == 2:
+                return ('Scissors cuts Paper', 'You Win')
+            elif computer == 4:
+                return ('Scissors decapitates Lizard', 'You Win')
+            else:
+                return ('Spock smashes Scissors', 'You Lose')
+        elif player == 4:
+            if computer == 1:
+                return ('Rock crushes Lizard', 'You Lose')
+            elif computer == 2:
+                return ('Lizard eats Paper', 'You Win')
+            elif computer == 3:
+                return ('Scissors decapitates Lizard', 'You Lose')
+            else:
+                return ('Lizard poisons Spock', 'You Win')
+        elif player == 5:
+            if computer == 1:
+                return ('Spock vaporizes Rock', 'You Win')
+            elif computer == 2:
+                return ('Paper disproves Spock', 'You Lose')
+            elif computer == 3:
+                return ('Spock smashes Scissors', 'You Win')
+            else:
+                return ('Lizard poisons Spock', 'You Lose')
 
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())
+
+    def clickRock(self):
+        player = 1
+        (phrase, winner) = self.gameplay(player)
+        self.labelTitle.setText(f'{phrase}!')
+        self.labelWinner.setText(f'{winner}. Play again?')
+
+    def clickPaper(self):
+        player = 2
+        (phrase, winner) = self.gameplay(player)
+        self.labelTitle.setText(f'{phrase}!')
+        self.labelWinner.setText(f'{winner}. Play again?')
+
+    def clickScissors(self):
+        player = 3
+        (phrase, winner) = self.gameplay(player)
+        self.labelTitle.setText(f'{phrase}!')
+        self.labelWinner.setText(f'{winner}. Play again?')
+
+    def clickLizard(self):
+        player = 4
+        (phrase, winner) = self.gameplay(player)
+        self.labelTitle.setText(f'{phrase}!')
+        self.labelWinner.setText(f'{winner}. Play again?')
+
+    def clickSpock(self):
+        player = 5
+        (phrase, winner) = self.gameplay(player)
+        self.labelTitle.setText(f'{phrase}!')
+        self.labelWinner.setText(f'{winner}. Play again?')
+
